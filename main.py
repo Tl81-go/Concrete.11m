@@ -7,7 +7,7 @@ import pandas as pd
 # ==========================================
 
 st.set_page_config(
-    page_title="콘크리트 압축강도 예측 실험실 조현서를 위한",
+    page_title="콘크리트 압축강도 예측 실험실",
     page_icon="🏗️",
     layout="wide"
 )
