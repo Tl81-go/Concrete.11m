@@ -17,6 +17,7 @@ DATA_URL = (
     "Tl81-go/Concrete.11m/main/data/concrete.csv"
 )
 
+
 # ==========================================
 # 2. 데이터 불러오기
 # ==========================================
@@ -24,7 +25,15 @@ DATA_URL = (
 @st.cache_data(ttl=3600)
 def load_data():
     df = pd.read_csv(DATA_URL)
+
+    # 열 이름 앞뒤 공백 제거
     df.columns = df.columns.str.strip()
+
+    # 원본 데이터의 압축강도 열 이름을 통일
+    df = df.rename(columns={
+        "Concrete compressive strength": "Strength"
+    })
+
     return df
 
 
@@ -106,28 +115,16 @@ st.write(
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    st.metric(
-        "전체 데이터",
-        f"{len(df):,}개"
-    )
+    st.metric("전체 데이터", f"{len(df):,}개")
 
 with col2:
-    st.metric(
-        "입력 변수",
-        f"{len(features)}개"
-    )
+    st.metric("입력 변수", f"{len(features)}개")
 
 with col3:
-    st.metric(
-        "예측 변수",
-        "1개"
-    )
+    st.metric("예측 변수", "1개")
 
 with col4:
-    st.metric(
-        "전체 열",
-        f"{len(df.columns)}개"
-    )
+    st.metric("전체 열", f"{len(df.columns)}개")
 
 st.divider()
 
@@ -192,7 +189,7 @@ st.divider()
 
 
 # ==========================================
-# 8. 앞으로 만들 실험실 메뉴
+# 8. 실험실 메뉴 안내
 # ==========================================
 
 st.header("🔬 실험실 이용 안내")
@@ -214,7 +211,15 @@ for icon, name, description in pages_info:
 
 
 # ==========================================
-# 9. 하단 안내
+# 9. 데이터 미리보기
+# ==========================================
+
+with st.expander("데이터 미리보기"):
+    st.dataframe(df.head(10), use_container_width=True)
+
+
+# ==========================================
+# 10. 하단 안내
 # ==========================================
 
 st.divider()
